@@ -36,33 +36,11 @@ function toggleHeatmap() {
   heatmap.setMap(heatmap.getMap() ? null : map);
 }
 
-function changeGradient() {
-  const gradient = [
-    "rgba(0, 255, 255, 0)",
-    "rgba(0, 255, 255, 1)",
-    "rgba(0, 191, 255, 1)",
-    "rgba(0, 127, 255, 1)",
-    "rgba(0, 63, 255, 1)",
-    "rgba(0, 0, 255, 1)",
-    "rgba(0, 0, 223, 1)",
-    "rgba(0, 0, 191, 1)",
-    "rgba(0, 0, 159, 1)",
-    "rgba(0, 0, 127, 1)",
-    "rgba(63, 0, 91, 1)",
-    "rgba(127, 0, 63, 1)",
-    "rgba(191, 0, 31, 1)",
-    "rgba(255, 0, 0, 1)",
-  ];
-  heatmap.set("gradient", heatmap.get("gradient") ? null : gradient);
-}
-
 function changeRadius() {
   heatmap.set("radius", heatmap.get("radius") ? null : 20);
+  heatmap.setMap(null);
 }
 
-function changeOpacity() {
-  heatmap.set("opacity", heatmap.get("opacity") ? null : 0.2);
-}
 
 const createHeatmap = (bicycleHistory) => {
   return new google.maps.visualization.HeatmapLayer({
@@ -74,10 +52,10 @@ const createHeatmap = (bicycleHistory) => {
 
 async function init() {
   const bicycle = {
-                    url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
-                    //url: "https://www.pinclipart.com/picdir/middle/547-5476830_drone-svg-png-icon-free-download-drone-icon.png",
-
-                    scaledSize: new google.maps.Size(50, 50)
+                    //url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
+                    url: "https://image.flaticon.com/icons/png/512/1013/1013307.png",
+                    scaledSize: new google.maps.Size(30, 30),
+                    anchor: new google.maps.Point(15, 15)
                   }
   var bicyclePositions = [];
   var response = await fetch('https://api.thingspeak.com/channels/1396775/feeds.json?api_key=V4QNC2WLJQPOJJ65&location=true');
