@@ -59,10 +59,13 @@ let app;
         }
     });
     
+    app.use(express.static(__dirname + '/client'));
+
     // Serve index.html for default route
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '/client/index.html'));//'client/index.html'));
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, '/client/index.html'));
     });
+
 
     app.listen(config.server.port, () => {
         // Console message

@@ -49,7 +49,6 @@ const createHeatmap = (bicycleHistory) => {
   });
 }
 
-
 async function init() {
   const bicycle = {
                     //url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
@@ -94,4 +93,4 @@ async function init() {
     strokeOpacity: 1.0,
     strokeWeight: 2
   });
-}
+};
