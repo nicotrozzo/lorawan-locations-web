@@ -3,7 +3,11 @@ const express = require('express');
 const path = require('path');
 
 // Importing server configuration
-const config = require('./config');
+const config = {
+    server: {
+        port: process.env.PORT 
+    }
+};
 
 // Importing locations
 const { getSafeZone, isValidZone, isInsideZone } = require('./loc_server/locations');
