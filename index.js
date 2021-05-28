@@ -5,12 +5,12 @@ const path = require('path');
 // Importing server configuration
 const config = {
     server: {
-        port: process.env.PORT 
+        port: process.env.PORT || 5000
     }
 };
 
 // Importing locations
-const { getSafeZone, isValidZone, isInsideZone } = require('./loc_server/locations');
+const { getSafeZone, isValidZone } = require('./loc_server/locations');
 
 // Global variables
 let app;
@@ -38,23 +38,6 @@ let app;
         {
             res.status(400).send({
                 message: "Provide a valid safe zone"
-            });
-        }
-    });
-
-    // See if location is inside zone endpoint
-    app.get('/api/is_inside', (req, res) => {
-        let zone = req.query.zone;
-        let lat = Number(req.query.latitude), lng = Number(req.query.longitude);
-        console.log(`Location: [${lat}, ${lng}]. Type: ${typeof(lat)}`);
-        if ( (typeof zone === 'string') && (typeof lat === 'number') && (typeof lng === 'number') && isValidZone(zone))
-        {
-            res.send(isInsideZone(zone, {lat, lng}));
-        }
-        else
-        {
-            res.status(400).send({
-                message: "Please specify both a safe zone and a location"
             });
         }
     });
