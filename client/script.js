@@ -41,7 +41,6 @@ function changeRadius() {
   heatmap.setMap(null);
 }
 
-
 const createHeatmap = (bicycleHistory) => {
   return new google.maps.visualization.HeatmapLayer({
     data: bicycleHistory,
@@ -49,6 +48,15 @@ const createHeatmap = (bicycleHistory) => {
   });
 }
 
+const createPolyline = (bicycleHistory) => {
+  return new google.maps.Polyline({
+    map: map,
+    path: bicycleHistory,
+    strokeColor: "#FF0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+}
 
 async function init() {
   const bicycle = {
@@ -87,11 +95,5 @@ async function init() {
   const marker = createMarker({position: lastPosition, image: bicycle });
   const bolognaSafeZone = createSafeZone(safeZone);
   heatmap = createHeatmap(bicycleHistory);
-  var flightPath = new google.maps.Polyline({
-    map: map,
-    path: bicycleHistory,
-    strokeColor: "#FF0000",
-    strokeOpacity: 1.0,
-    strokeWeight: 2
-  });
+  var flightPath = createPolyline(bicycleHistory);
 }
