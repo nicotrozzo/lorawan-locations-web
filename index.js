@@ -6,7 +6,7 @@ const path = require('path');
 const config = require('./config');
 
 // Importing locations
-const { getSafeZone, isValidZone, isInsideZone } = require('./locations');
+const { getSafeZone, isValidZone, isInsideZone } = require('./loc_server/locations');
 
 // Global variables
 let app;
@@ -57,13 +57,8 @@ let app;
     
     // Serve index.html for default route
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '/index.html'));
+        res.sendFile(path.join(__dirname, './index.html'));//'client/index.html'));
     });
-
-    // Serve index.html for default route
-    // app.get('*', (req, res) => {
-    //     res.sendFile(process.cwd() + "/app/dist/app/index.html");
-    // });
 
     app.listen(config.server.port, () => {
         // Console message
