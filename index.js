@@ -66,7 +66,6 @@ let app;
         res.sendFile(path.join(__dirname, '/client/index.html'));
     });
 
-
     app.listen(config.server.port, () => {
         // Console message
         console.log(`[Server] The server is listening to port ${config.server.port}`);
