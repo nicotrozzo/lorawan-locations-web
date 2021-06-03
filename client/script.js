@@ -64,8 +64,8 @@ const createPolyline = (bicycleHistory) => {
 
 async function init() {
   const bicycle = {
-                    //url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
-                    url: "https://image.flaticon.com/icons/png/512/1013/1013307.png",
+                    url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
+                    //url: "https://image.flaticon.com/icons/png/512/1013/1013307.png",
                     scaledSize: new google.maps.Size(30, 30),
                     anchor: new google.maps.Point(15, 15)
                   }
