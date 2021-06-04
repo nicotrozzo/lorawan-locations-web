@@ -1,4 +1,19 @@
-let map, heatmap, flightPath;
+let map, heatmap, flightPath, marker, bicycle;
+
+var socket = io({transports: ['websocket'], upgrade: false});
+
+socket.on('new-location', async () => {
+  console.log('New location!');
+  var bicyclePositions = await getBikeLocations();
+  const lastPosition = bicyclePositions[bicyclePositions.length - 1];
+  marker.setPosition(new google.maps.LatLng(lastPosition.lat, lastPosition.lng));
+  const bicycleHistory = [];
+  for (let i=0; i<bicyclePositions.length; i++) {
+    bicycleHistory.push(new google.maps.LatLng(bicyclePositions[i]));
+  }
+  heatmap = createHeatmap(bicycleHistory);
+  flightPath = createPolyline(bicycleHistory);
+});
 
 const createMap = ({ lat, lng }) => {
   return new google.maps.Map(document.getElementById('map'), {
@@ -62,23 +77,29 @@ const createPolyline = (bicycleHistory) => {
   return polyline;
 }
 
-async function init() {
-  const bicycle = {
-                    url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
-                    //url: "https://image.flaticon.com/icons/png/512/1013/1013307.png",
-                    scaledSize: new google.maps.Size(30, 30),
-                    anchor: new google.maps.Point(15, 15)
-                  }
+async function getBikeLocations()
+{
   var bicyclePositions = [];
   var response = await fetch('https://api.thingspeak.com/channels/1396775/feeds.json?api_key=V4QNC2WLJQPOJJ65&location=true');
   var data = await response.json();
-  const createdAt = 'created_at';
   data["feeds"].forEach( (el) => {
     bicyclePositions.push({
       lat: Number(el["latitude"]),
       lng: Number(el["longitude"])
     })
   });
+
+  return bicyclePositions;
+}
+
+async function init() {
+  bicycle = {
+    url: "https://icon-library.com/images/bicycle-icon-png/bicycle-icon-png-20.jpg",
+    //url: "https://image.flaticon.com/icons/png/512/1013/1013307.png",
+    scaledSize: new google.maps.Size(30, 30),
+    anchor: new google.maps.Point(15, 15)
+  };
+  var bicyclePositions = await getBikeLocations();
   const lastPosition = bicyclePositions[bicyclePositions.length - 1];
   const safeZone = [
     { lat: 44.505688, lng: 11.339667 },
@@ -92,12 +113,12 @@ async function init() {
     { lat: 44.499135, lng: 11.327006 },
   ];
   const bicycleHistory = []
-  for (let i=0; i<bicyclePositions.length; i++){
+  for (let i=0; i<bicyclePositions.length; i++) {
     bicycleHistory.push(new google.maps.LatLng(bicyclePositions[i]));
   }
   map = createMap(lastPosition);
-  const marker = createMarker({position: lastPosition, image: bicycle });
-  const bolognaSafeZone = createSafeZone(safeZone);
+  marker = createMarker({position: lastPosition, image: bicycle });
+  createSafeZone(safeZone);
   heatmap = createHeatmap(bicycleHistory);
   flightPath = createPolyline(bicycleHistory);
 }

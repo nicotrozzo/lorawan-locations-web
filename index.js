@@ -1,6 +1,9 @@
 // Importing required node modules
 const express = require('express');
 const path = require('path');
+const http = require('http');
+const { Server } = require("socket.io");
+
 
 // Importing server configuration
 const config = {
@@ -20,6 +23,30 @@ let app;
 
     // Creates the express app
     app = express();
+
+    // Create HTTP Server
+    const server = http.createServer(app);
+
+    // Socket.io instance
+    const io = new Server(server, {
+        cors: {
+            origin: "http://localhost:8000",
+            methods: ["GET", "POST"],
+            transports: ['websocket'],
+            credentials: true
+        },
+        allowEIO3: true
+    });
+
+    // Socket onConnection callback
+    io.on('connection', (socket) => {
+        console.log('New connection!')
+        socket.on('disconnection', () => {
+            console.log('User disconnected :( ');
+        })
+      });
+      
+    
 
     // Logging requests
     app.use((req, res, next) => {
@@ -41,6 +68,13 @@ let app;
             });
         }
     });
+
+    // Location Updated Request
+    app.get('/api/new_location', (req, res) => {
+        console.log('New location...');
+        io.emit('new-location');
+        res.send(200);
+    });
     
     app.use(express.static(__dirname + '/client'));
 
@@ -49,7 +83,7 @@ let app;
         res.sendFile(path.join(__dirname, '/client/index.html'));
     });
 
-    app.listen(config.server.port, () => {
+    server.listen(config.server.port, () => {
         // Console message
         console.log(`[Server] The server is listening to port ${config.server.port}`);
     });
