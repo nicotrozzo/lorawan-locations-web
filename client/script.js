@@ -3,7 +3,6 @@ let map, heatmap, flightPath, marker, bicycle;
 var socket = io({transports: ['websocket'], upgrade: false});
 
 socket.on('new-location', async () => {
-  console.log('New location!');
   var bicyclePositions = await getBikeLocations();
   const lastPosition = bicyclePositions[bicyclePositions.length - 1];
   marker.setPosition(new google.maps.LatLng(lastPosition.lat, lastPosition.lng));
